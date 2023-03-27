@@ -1,4 +1,4 @@
-module github.com/blust/grpc-proto/helloworld
+module github.com/blust/grpc-proto
 
 go 1.18
 
