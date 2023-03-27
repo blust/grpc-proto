@@ -25,7 +25,7 @@ type GreeterClient interface {
 	// Sends a greeting
 	SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error)
 	// Sends another greeting
-	SayHelloAgain(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloAgainReply, error)
+	SayHelloAgain(ctx context.Context, in *HelloAgainRequest, opts ...grpc.CallOption) (*HelloAgainReply, error)
 }
 
 type greeterClient struct {
@@ -45,7 +45,7 @@ func (c *greeterClient) SayHello(ctx context.Context, in *HelloRequest, opts ...
 	return out, nil
 }
 
-func (c *greeterClient) SayHelloAgain(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloAgainReply, error) {
+func (c *greeterClient) SayHelloAgain(ctx context.Context, in *HelloAgainRequest, opts ...grpc.CallOption) (*HelloAgainReply, error) {
 	out := new(HelloAgainReply)
 	err := c.cc.Invoke(ctx, "/helloworld.Greeter/SayHelloAgain", in, out, opts...)
 	if err != nil {
@@ -61,7 +61,7 @@ type GreeterServer interface {
 	// Sends a greeting
 	SayHello(context.Context, *HelloRequest) (*HelloReply, error)
 	// Sends another greeting
-	SayHelloAgain(context.Context, *HelloRequest) (*HelloAgainReply, error)
+	SayHelloAgain(context.Context, *HelloAgainRequest) (*HelloAgainReply, error)
 	mustEmbedUnimplementedGreeterServer()
 }
 
@@ -72,7 +72,7 @@ type UnimplementedGreeterServer struct {
 func (UnimplementedGreeterServer) SayHello(context.Context, *HelloRequest) (*HelloReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
 }
-func (UnimplementedGreeterServer) SayHelloAgain(context.Context, *HelloRequest) (*HelloAgainReply, error) {
+func (UnimplementedGreeterServer) SayHelloAgain(context.Context, *HelloAgainRequest) (*HelloAgainReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SayHelloAgain not implemented")
 }
 func (UnimplementedGreeterServer) mustEmbedUnimplementedGreeterServer() {}
@@ -107,7 +107,7 @@ func _Greeter_SayHello_Handler(srv interface{}, ctx context.Context, dec func(in
 }
 
 func _Greeter_SayHelloAgain_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HelloRequest)
+	in := new(HelloAgainRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -119,7 +119,7 @@ func _Greeter_SayHelloAgain_Handler(srv interface{}, ctx context.Context, dec fu
 		FullMethod: "/helloworld.Greeter/SayHelloAgain",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GreeterServer).SayHelloAgain(ctx, req.(*HelloRequest))
+		return srv.(GreeterServer).SayHelloAgain(ctx, req.(*HelloAgainRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
